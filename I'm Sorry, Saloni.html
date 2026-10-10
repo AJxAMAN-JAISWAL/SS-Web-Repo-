@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I'm Sorry, Saloni</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-top: #f9dde6;
+    --bg-bottom: #e7a9c0;
+    --ink: #3c1f33;
+    --muted: #8a5570;
+    --accent: #c98a3e;
+    --card: #fff6f0;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg-top: #2b1620;
+      --bg-bottom: #4a1f32;
+      --ink: #f6e4ec;
+      --muted: #d8a7bf;
+      --accent: #e3ac5e;
+      --card: #3a1f2c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg-top: #2b1620; --bg-bottom: #4a1f32; --ink: #f6e4ec;
+    --muted: #d8a7bf; --accent: #e3ac5e; --card: #3a1f2c;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    min-height: 100%;
+    background: linear-gradient(170deg, var(--bg-top), var(--bg-bottom));
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(env(safe-area-inset-top,0px) + 20px) 18px calc(env(safe-area-inset-bottom,0px) + 20px);
+    overflow-x: hidden;
+    position: relative;
+  }
+  .heart {
+    position: fixed;
+    top: -8%;
+    pointer-events: none;
+    opacity: 0.55;
+    animation: drift linear infinite;
+    filter: blur(0.2px);
+  }
+  @keyframes drift {
+    to { transform: translateY(112vh) rotate(25deg); }
+  }
+  .card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 38px 30px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(60, 20, 40, 0.25);
+    z-index: 1;
+    transition: transform 0.4s ease;
+  }
+  h1 {
+    font-family: "Caveat", cursive;
+    font-weight: 700;
+    font-size: 2.6rem;
+    line-height: 1.1;
+    margin: 0 0 14px;
+    color: var(--accent);
+  }
+  p {
+    line-height: 1.65;
+    font-size: 1.02rem;
+    color: var(--ink);
+    max-width: 34ch;
+    margin: 0 auto 10px;
+  }
+  .muted { color: var(--muted); font-size: 0.9rem; margin-top: 18px; }
+  .buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 26px;
+    flex-wrap: wrap;
+    position: relative;
+    min-height: 54px;
+  }
+  button {
+    border: none;
+    border-radius: 999px;
+    padding: 13px 24px;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+  }
+  #yes { background: var(--accent); color: #fff6f0; }
+  #no {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    position: relative;
+  }
+  #reveal { display: none; }
+  #reveal p { margin-top: 4px; }
+  @media (prefers-reduced-motion: reduce) {
+    .heart { animation: none; display: none; }
+    .card { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+  <div id="front">
+    <h1>I'm sorry, Saloni</h1>
+    <p>I said some things in anger that I didn't mean, and I've regretted it since they left my mouth. You didn't deserve that — I'm sorry.</p>
+    <p>Remember the photographer at our pre-wedding shoot going on about "thoda aur close aao"? That's exactly where I want to be right now. Close to you, not on opposite sides of this.</p>
+    <p class="muted">Can we start over?</p>
+    <div class="buttons" id="btns">
+      <button id="yes">I forgive you</button>
+      <button id="no">Give me a minute</button>
+    </div>
+  </div>
+  <div id="reveal">
+    <h1>Thank you</h1>
+    <p>That means everything. I'm going to think before I speak next time, I promise. Thoda aur close aao — let's close this gap together. I love you.</p>
+  </div>
+</div>
+
+<script>
+  const emojis = ['🩷','💗','💌','🌷'];
+  const count = window.innerWidth < 500 ? 10 : 16;
+  for (let i = 0; i < count; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.fontSize = (1 + Math.random() * 1.1) + 'rem';
+    h.style.animationDuration = (9 + Math.random() * 7) + 's';
+    h.style.animationDelay = (Math.random() * 8) + 's';
+    document.body.appendChild(h);
+  }
+
+  const noBtn = document.getElementById('no');
+  const yesBtn = document.getElementById('yes');
+  const btns = document.getElementById('btns');
+  let dodges = 0;
+
+  function dodge() {
+    dodges++;
+    const x = (Math.random() - 0.5) * 150;
+    const y = (Math.random() - 0.5) * 50;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    if (dodges > 2) noBtn.textContent = 'pretty please?';
+  }
+  noBtn.addEventListener('mouseenter', dodge);
+  noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); dodge(); }, { passive: false });
+
+  yesBtn.addEventListener('click', () => {
+    document.getElementById('front').style.display = 'none';
+    document.getElementById('reveal').style.display = 'block';
+  });
+</script>
+</body>
+</html>
