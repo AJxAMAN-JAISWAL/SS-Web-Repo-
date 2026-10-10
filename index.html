@@ -8,30 +8,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-top: #f9dde6;
-    --bg-bottom: #e7a9c0;
+    --bg-top: #fdf0f5;
+    --bg-bottom: #f3c5d3;
     --ink: #3c1f33;
     --muted: #8a5570;
-    --accent: #c98a3e;
-    --card: #fff6f0;
+    --accent: #d95f7d;
+    --accent-2: #f0b355;
+    --card: rgba(255, 250, 252, 0.8);
+    --card-border: rgba(133, 77, 100, 0.15);
+    --shadow: rgba(100, 43, 61, 0.18);
     color-scheme: light;
   }
+
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg-top: #2b1620;
       --bg-bottom: #4a1f32;
       --ink: #f6e4ec;
       --muted: #d8a7bf;
-      --accent: #e3ac5e;
-      --card: #3a1f2c;
+      --accent: #f59ab0;
+      --accent-2: #f3c97d;
+      --card: rgba(57, 31, 42, 0.78);
+      --card-border: rgba(255, 255, 255, 0.09);
+      --shadow: rgba(0, 0, 0, 0.32);
     }
   }
+
   :root[data-theme="dark"] {
-    --bg-top: #2b1620; --bg-bottom: #4a1f32; --ink: #f6e4ec;
-    --muted: #d8a7bf; --accent: #e3ac5e; --card: #3a1f2c;
+    --bg-top: #2b1620;
+    --bg-bottom: #4a1f32;
+    --ink: #f6e4ec;
+    --muted: #d8a7bf;
+    --accent: #f59ab0;
+    --accent-2: #f3c97d;
+    --card: rgba(57, 31, 42, 0.78);
+    --card-border: rgba(255, 255, 255, 0.09);
+    --shadow: rgba(0, 0, 0, 0.32);
   }
+
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
+
   body {
     min-height: 100%;
     background: linear-gradient(170deg, var(--bg-top), var(--bg-bottom));
@@ -40,10 +57,35 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: calc(env(safe-area-inset-top,0px) + 20px) 18px calc(env(safe-area-inset-bottom,0px) + 20px);
+    padding: 32px 18px 56px;
     overflow-x: hidden;
     position: relative;
   }
+
+  .page-shell {
+    width: min(100%, 980px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .top-badge {
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(8px);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    box-shadow: 0 12px 30px rgba(72, 27, 44, 0.08);
+  }
+
   .heart {
     position: fixed;
     top: -8%;
@@ -52,36 +94,61 @@
     animation: drift linear infinite;
     filter: blur(0.2px);
   }
+
   @keyframes drift {
     to { transform: translateY(112vh) rotate(25deg); }
   }
+
   .card {
     background: var(--card);
-    border-radius: 20px;
+    border: 1px solid var(--card-border);
+    border-radius: 26px;
     padding: 38px 30px;
-    max-width: 420px;
+    max-width: 520px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 24px 60px rgba(60, 20, 40, 0.25);
+    box-shadow: 0 24px 60px var(--shadow);
     z-index: 1;
-    transition: transform 0.4s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    backdrop-filter: blur(10px);
   }
+
+  .card:hover { transform: translateY(-3px); }
+
   h1 {
     font-family: "Caveat", cursive;
     font-weight: 700;
-    font-size: 2.6rem;
+    font-size: clamp(2.7rem, 4vw, 4rem);
     line-height: 1.1;
     margin: 0 0 14px;
     color: var(--accent);
+    letter-spacing: 0.02em;
   }
+
+  h2 {
+    font-family: "Caveat", cursive;
+    font-weight: 700;
+    font-size: clamp(2.1rem, 3vw, 3rem);
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+
   p {
-    line-height: 1.65;
+    line-height: 1.75;
     font-size: 1.02rem;
     color: var(--ink);
     max-width: 34ch;
     margin: 0 auto 10px;
   }
-  .muted { color: var(--muted); font-size: 0.9rem; margin-top: 18px; }
+
+  .muted {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 18px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
   .buttons {
     display: flex;
     gap: 12px;
@@ -91,6 +158,7 @@
     position: relative;
     min-height: 54px;
   }
+
   button {
     border: none;
     border-radius: 999px;
@@ -98,45 +166,209 @@
     font-size: 1rem;
     font-family: inherit;
     cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.2s ease;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  #yes { background: var(--accent); color: #fff6f0; }
+
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(118, 54, 76, 0.2);
+  }
+
+  #yes {
+    background: linear-gradient(135deg, var(--accent), #f38ea2);
+    color: #fff;
+  }
+
   #no {
     background: transparent;
     border: 2px solid var(--accent);
     color: var(--accent);
     position: relative;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, box-shadow 0.25s ease;
   }
+
+  #front { display: block; }
   #reveal { display: none; }
-  #reveal p { margin-top: 4px; }
+  #reveal p { margin-top: 10px; }
+
+  .promise-box {
+    width: min(100%, 900px);
+    padding: 26px 24px;
+    text-align: left;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+    box-shadow: 0 24px 60px var(--shadow);
+    z-index: 1;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    /* box-shadow: 0 18px 40px rgba(58, 26, 39, 0.08); */
+    backdrop-filter: blur(10px);
+  }
+
+  .extra-section {
+    width: min(100%, 900px);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+  }
+
+  .page-shell.revealed .extra-section {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .memory, .promise-box {
+    background: rgba(255, 255, 255, 0.52);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(58, 26, 39, 0.08);
+  }
+
+  .memory {
+    padding: 20px 18px;
+    text-align: left;
+  }
+
+  .memory .index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .memory h3 {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+
+  .memory p {
+    margin: 0;
+    max-width: none;
+    font-size: 0.96rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .promise-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 18px;
+  }
+
+  .promise-box li {
+    position: relative;
+    padding-left: 30px;
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  .promise-box li::before {
+    content: "♥";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent);
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 760px) {
+    .extra-section {
+      grid-template-columns: 1fr;
+    }
+
+    .promise-box ul {
+      grid-template-columns: 1fr;
+    }
+
+    .card {
+      padding: 32px 20px;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .heart { animation: none; display: none; }
     .card { transition: none; }
+    .extra-section { transition: none; }
+    button { transition: none; }
   }
 </style>
 </head>
 <body>
 
-<div class="card" id="card">
-  <div id="front">
-    <h1>I'm sorry, Saloni</h1>
-    <p>I said some things in anger that I didn't mean, and I've regretted it since they left my mouth. You didn't deserve that — I'm sorry.</p>
-    <p>Remember the photographer at our pre-wedding shoot going on about "thoda aur close aao"? That's exactly where I want to be right now. Close to you, not on opposite sides of this.</p>
-    <p class="muted">Can we start over?</p>
-    <div class="buttons" id="btns">
-      <button id="yes">I forgive you</button>
-      <button id="no">Give me a minute</button>
+<div class="page-shell" id="pageShell">
+  <div class="top-badge">For Saloni</div>
+
+  <div class="card" id="card">
+    <div id="front">
+      <h1>I'm sorry, Saloni</h1>
+      <p>I said some things in anger that I didn't mean, and I've regretted it since they left my mouth. You didn't deserve that — I'm sorry.</p>
+      <p>Remember the photographer at our pre-wedding shoot going on about "thoda aur close aao"? That's exactly where I want to be right now. Close to you, not on opposite sides of this.</p>
+      <p class="muted">Can we start over?</p>
+      <div class="buttons" id="btns">
+        <button id="yes">I forgive you</button>
+        <button id="no">Give me a minute</button>
+      </div>
+    </div>
+
+    <div id="reveal">
+      <h1>Thank you</h1>
+      <p>That means everything. I'm going to think before I speak next time, I promise. Thoda aur close aao — let's close this gap together. I love you.</p>
+      <p class="muted">You are my favorite place to come home to.</p>
     </div>
   </div>
-  <div id="reveal">
-    <h1>Thank you</h1>
-    <p>That means everything. I'm going to think before I speak next time, I promise. Thoda aur close aao — let's close this gap together. I love you.</p>
-  </div>
+
+  <section class="promise-box" aria-label="Promise">
+    <h2>A tiny promise</h2>
+    <ul>
+      <li>I will listen before I react.</li>
+      <li>I will choose patience over pride.</li>
+      <li>I will love you gently, even in hard moments.</li>
+      <li>I will keep showing up, no matter what.</li>
+    </ul>
+  </section>
+
+  <section class="extra-section" aria-label="Favorite things about you">
+    <article class="memory">
+      <div class="index">01</div>
+      <h3>Your smile</h3>
+      <p>It has a kind of calm that makes the world feel softer. Even on the hardest days, it makes everything feel lighter.</p>
+    </article>
+
+    <article class="memory">
+      <div class="index">02</div>
+      <h3>Your heart</h3>
+      <p>You care so deeply, even when you try to hide it. That gentleness is one of the biggest reasons I keep choosing you.</p>
+    </article>
+
+    <article class="memory">
+      <div class="index">03</div>
+      <h3>Our little world</h3>
+      <p>From small conversations to silent comfort, the moments with you turn ordinary days into beautiful memories.</p>
+    </article>
+  </section>
 </div>
 
 <script>
-  const emojis = ['🩷','💗','💌','🌷'];
+  const emojis = ['🩷','💗','💌','🌷','✨'];
   const count = window.innerWidth < 500 ? 10 : 16;
   for (let i = 0; i < count; i++) {
     const h = document.createElement('div');
@@ -151,22 +383,29 @@
 
   const noBtn = document.getElementById('no');
   const yesBtn = document.getElementById('yes');
-  const btns = document.getElementById('btns');
+  const pageShell = document.getElementById('pageShell');
   let dodges = 0;
 
   function dodge() {
     dodges++;
-    const x = (Math.random() - 0.5) * 150;
-    const y = (Math.random() - 0.5) * 50;
+    const x = (Math.random() - 0.5) * 140;
+    const y = (Math.random() - 0.5) * 38;
+    noBtn.style.transition = 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease';
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
     if (dodges > 2) noBtn.textContent = 'pretty please?';
+    if (dodges > 4) {
+      noBtn.textContent = 'I understand';
+      noBtn.style.opacity = '0.8';
+    }
   }
+
   noBtn.addEventListener('mouseenter', dodge);
   noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); dodge(); }, { passive: false });
 
   yesBtn.addEventListener('click', () => {
     document.getElementById('front').style.display = 'none';
     document.getElementById('reveal').style.display = 'block';
+    pageShell.classList.add('revealed');
   });
 </script>
 </body>
